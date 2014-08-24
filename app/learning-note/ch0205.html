@@ -6,12 +6,13 @@
 </head>
 <body>
 
-	<script src="../../src/jquery.min.js"></script>
-	<script src="../../src/underscore.js"></script>
-	<script src="../../src/backbone.js"></script>
+	<script src="http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+	<script src="http://cdn.staticfile.org/underscore.js/1.6.0/underscore-min.js"></script>
+	<script src="http://cdn.staticfile.org/backbone.js/1.1.2/backbone-min.js"></script>
 	<script>
 	(function ($) {
 		var Man = Backbone.Model.extend({
+			url : '/man',
 			initialize : function() {
 				this.bind('change:name', function () {
 					var name = this.get('name');
@@ -35,8 +36,21 @@
 		});
 
 		var man = new Man;
-		man.set({name : ''});
+		man.set({name : 'fakefish'});
 		man.save();
+
+		var man1 = new Man;
+		// man1.fetch({url:'/man'});
+		man1.fetch({
+			url: '/man',
+			success: function(model, res) {
+				console.log(res);
+				alert(model.get('name'));
+			},
+			error: function() {
+				alert('error');
+			}
+		})
 	})(jQuery);
 	</script>
 </body>
