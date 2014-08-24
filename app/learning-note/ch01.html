@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>ch01</title>
+</head>
+<body>
+	<button id="check">Check</button>
+	<ul id="world-list"></ul>
+
+	<script src="../../src/jquery.min.js"></script>
+	<script src="../../src/underscore.js"></script>
+	<script src="../../src/backbone.js"></script>
+	<script>
+	(function ($) {
+		var World = Backbone.Model.extend({
+			name : null
+		});
+
+		Worlds = Backbone.Collection.extend({
+			initialize: function (model, options) {
+				this.bind('add', options.view.addOneWorld);
+			}
+		});
+
+		AppView = Backbone.View.extend({
+			el : $('body'),
+
+			initialize : function () {
+				this.worlds = new Worlds(null, { view : this});
+			},
+
+			events : {
+				'click #check' : 'checkIn',
+			},
+
+			checkIn : function() {
+				var worldName = prompt('where are you');
+				if(worldName == '') worldName = 'unknow';
+				var world = new World({ name : worldName });
+				this.worlds.add(world);
+			},
+
+			addOneWorld : function (model) {
+				$('#world-list').append("<li>This is from "+model.get('name')+': hello world');
+			}
+		});
+
+		var appview = new AppView;
+	})(jQuery);
+	</script>
+</body>
+</html>
